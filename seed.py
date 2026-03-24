@@ -17,9 +17,9 @@ def seed():
         # Create admin user
         if not User.query.filter_by(username='admin').first():
             admin = User(username='admin', email='admin@ctf.local', is_admin=True)
-            admin.set_password('admin@1234**')
+            admin.set_password('admin@1234')
             db.session.add(admin)
-            print('[+] Admin user created  →  admin / admin@1234**')
+            print('[+] Admin user created  →  admin / admin@1234')
         else:
             print('[*] Admin user already exists.')
 
