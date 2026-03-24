@@ -17,9 +17,9 @@ def seed():
         # Create admin user
         if not User.query.filter_by(username='admin').first():
             admin = User(username='admin', email='admin@ctf.local', is_admin=True)
-            admin.set_password('admin1234')
+            admin.set_password('admin@1234**')
             db.session.add(admin)
-            print('[+] Admin user created  →  admin / admin1234')
+            print('[+] Admin user created  →  admin / admin@1234**')
         else:
             print('[*] Admin user already exists.')
 
@@ -58,6 +58,22 @@ def seed():
                 'category': 'osint',
                 'points': 125,
                 'flag': 'CTF{john_doe}',
+            },
+            {
+                'title': 'SSH Log Deep Dive',
+                'description': (
+                    'You receive an auth.log snippet from a Linux server:\n'
+                    'Feb 12 14:03:21 ctf sshd[2451]: Failed password for invalid user deploy from 203.0.113.77 port 53412 ssh2\n'
+                    'Feb 12 14:03:27 ctf sshd[2454]: Failed password for root from 203.0.113.77 port 53448 ssh2\n'
+                    'Feb 12 14:03:34 ctf sshd[2457]: Accepted password for admin from 203.0.113.77 port 53480 ssh2\n\n'
+                    'What username was successfully used to log in? Submit as CTF{username}.'
+                ),
+                'hint_1': 'Look for the line that says Accepted password.',
+                'hint_2': 'The accepted login is after the failed attempts.',
+                'hint_3': 'The username is directly after “for” on the Accepted line.',
+                'category': 'forensics',
+                'points': 150,
+                'flag': 'CTF{admin}',
             },
         ]
 
