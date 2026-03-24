@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Challenges — CTF Platform{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="page-header d-flex justify-between align-center">
+    <div>
+      <h1 class="page-title"><span class="prompt">$</span> ls ./challenges</h1>
+      <p class="page-subtitle">
+        {{ solved_ids|length }} solved &mdash;
+        {{ grouped.values()|map('list')|map('length')|sum }} total
+      </p>
+    </div>
+  </div>
+
+  {% if grouped %}
+    {% for category, challenges in grouped.items() %}
+    <div class="category-section">
+      <div class="category-label">
+        {{ category | upper }}
+        <span style="color:var(--text-muted); font-size:0.7rem;">({{ challenges|length }})</span>
+      </div>
+      <div class="challenge-grid">
+        {% for ch in challenges %}
+        <a href="{{ url_for('challenges.challenge_detail', challenge_id=ch.id) }}"
+           class="challenge-card {% if ch.id in solved_ids %}solved{% endif %}">
+          <div class="ch-title">{{ ch.title }}</div>
+          <div class="ch-desc">{{ ch.description }}</div>
+          <div class="ch-meta">
+            <span class="ch-points">{{ ch.points }} pts</span>
+            {% if ch.id in solved_ids %}
+              <span class="ch-solved-badge">✓ SOLVED</span>
+            {% else %}
+              <span class="ch-solves">{{ ch.solve_count }} solve{{ 's' if ch.solve_count != 1 }}</span>
+            {% endif %}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">⚑</div>
+      <div>No challenges available yet.</div>
+      {% if current_user.is_admin %}
+      <div class="mt-2">
+        <a href="{{ url_for('admin.new_challenge') }}" class="btn btn-primary btn-sm">+ Add First Challenge</a>
+      </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
